@@ -9,7 +9,7 @@ start:
 	if [[ "$$(systemctl is-active docker.service)" != "active" ]]; then \
 		sudo systemctl start docker.service; \
 	fi
-	docker-compose up -d
+	docker-compose up --detach
 
 stop:
 	docker-compose down
