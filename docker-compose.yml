@@ -1,0 +1,84 @@
+version: '3.5'
+
+volumes:
+  dbdata:
+  esdata:
+  cms-shared:
+
+networks:
+  db_net:
+  es_net:
+  http_net:
+
+services:
+  db:
+    image: postgres:11
+    command: postgres -c 'max_connections=200'
+    environment:
+        "POSTGRES_DB": 'dotcms'
+        "POSTGRES_USER": 'dotcmsdbuser'
+        "POSTGRES_PASSWORD": 'password'
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - "15432:5432"
+    networks:
+      - db_net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+    environment:
+      - bootstrap.memory_lock=true
+      - cluster.name=elastic-cluster
+      - discovery.type=single-node
+      - data
+      - "ES_JAVA_OPTS=-Xmx1G "
+    ulimits:
+      memlock:
+        hard: -1
+        soft: -1
+      nofile:
+        hard: 65536
+        soft: 65536
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - es_net
+    # ports:
+    #   - 9200:9200
+    #   - 9600:9600
+
+  http:
+    image: dotcms/haproxy-1.8:multiarch
+    environment:
+      "HAPROXY_CERT_PATH": '/certs/'
+      # "HAPROXY_REDIRECT_HTTPS_ALL": 'true'
+      # "HAPROXY_MAINTENANCE_PAGE": '/srv/config/503.http'
+    # volumes:
+      # - /data/dotcms/haproxy/certs:/certs:ro
+      # - /data/dotcms/haproxy/503.http:/srv/config/503.http:ro
+    networks:
+      - http_net
+    ports:
+      - "80:8080"
+      - "443:8443"
+
+  dotcms:
+    image: dotcms/dotcms:latest
+    environment:
+      "CMS_HEAP_SIZE": '2g'
+      "ES_ADMIN_PASSWORD": 'admin'
+      "PROVIDER_DB_DNSNAME": 'db'
+      "PROVIDER_ELASTICSEARCH_ENDPOINTS": 'http://elasticsearch:9200'
+    depends_on:
+      - db
+      - elasticsearch
+      - http
+    volumes:
+      - cms-shared:/data/shared
+      # - [serverpath]/license.dat:/data/local/dotsecure/license/license.dat
+      # - [serverpath]/license.zip:/data/shared/assets/license.zip
+    networks:
+      - db_net
+      - es_net
+      - http_net
