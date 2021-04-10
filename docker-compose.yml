@@ -82,3 +82,17 @@ services:
       - db_net
       - es_net
       - http_net
+
+  devutils:
+    image: lucidmachine/devutils-dotcms:latest
+    command: ["sleep", "infinity"]
+    depends_on:
+      - dotcms
+    volumes:
+      - dbdata:/data/dbdata
+      - esdata:/data/esdata
+      - cms-shared:/data/cms-shared
+    networks:
+      - db_net
+      - es_net
+      - http_net
