@@ -1,5 +1,8 @@
+name = dotcms-dev-env
+
+
 clean-volumes:
-	for volume in $$(docker volume ls | grep 'dotcms-starter' | rev | cut -d' ' -f1 | rev); do \
+	for volume in $$(docker volume ls | grep '$(name)' | rev | cut -d' ' -f1 | rev); do \
 		docker volume rm $$volume; \
 	done
 
@@ -17,5 +20,8 @@ stop:
 restart: stop start
 
 rebuild: stop clean start
+
+devutils:
+	docker exec --interactive --tty $(name)_devutils_1 /bin/zsh
 
 .PHONY: clean clean-volumes start stop
