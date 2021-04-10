@@ -91,7 +91,7 @@ services:
     volumes:
       - dbdata:/data/dbdata
       - esdata:/data/esdata
-      - cms-shared:/data/cms-shared
+      - cms-shared:/data/cmsdata
     networks:
       - db_net
       - es_net
