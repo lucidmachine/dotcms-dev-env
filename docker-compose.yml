@@ -3,7 +3,8 @@ version: '3.9'
 volumes:
   dbdata:
   esdata:
-  cms-shared:
+  cmsdata:
+  cmssrv:
 
 networks:
   db_net:
@@ -75,7 +76,8 @@ services:
       - elasticsearch
       - http
     volumes:
-      - cms-shared:/data/shared
+      - cmsdata:/data
+      - cmssrv:/srv
       # - [serverpath]/license.dat:/data/local/dotsecure/license/license.dat
       # - [serverpath]/license.zip:/data/shared/assets/license.zip
     networks:
@@ -91,7 +93,8 @@ services:
     volumes:
       - dbdata:/data/dbdata
       - esdata:/data/esdata
-      - cms-shared:/data/cmsdata
+      - cmsdata:/data/cmsdata
+      - cmssrv:/data/cmssrv
     networks:
       - db_net
       - es_net
