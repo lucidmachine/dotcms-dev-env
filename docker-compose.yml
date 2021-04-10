@@ -65,7 +65,7 @@ services:
       - "443:8443"
 
   dotcms:
-    image: dotcms/dotcms:latest
+    image: lucidmachine/dotcms:latest
     environment:
       "CMS_HEAP_SIZE": '2g'
       "ES_ADMIN_PASSWORD": 'admin'
@@ -91,10 +91,10 @@ services:
     depends_on:
       - dotcms
     volumes:
-      - dbdata:/data/dbdata
-      - esdata:/data/esdata
-      - cmsdata:/data/cmsdata
-      - cmssrv:/data/cmssrv
+      - dbdata:/volumes/dbdata
+      - esdata:/volumes/esdata
+      - cmsdata:/volumes/cmsdata
+      - cmssrv:/volumes/cmssrv
     networks:
       - db_net
       - es_net
