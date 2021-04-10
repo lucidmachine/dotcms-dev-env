@@ -21,7 +21,5 @@ restart: stop start
 
 rebuild: stop clean start
 
-devutils:
-	docker exec --interactive --tty $(name)_devutils_1 /bin/zsh
 
 .PHONY: clean clean-volumes start stop
