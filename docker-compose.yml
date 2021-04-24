@@ -67,8 +67,8 @@ services:
   dotcms:
     image: lucidmachine/dotcms:latest
     environment:
-      "CMS_JAVA_OPTS": '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000'
       "CMS_HEAP_SIZE": '2g'
+      "CMS_JAVA_OPTS": '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000'
       "ES_ADMIN_PASSWORD": 'admin'
       "PROVIDER_DB_DNSNAME": 'db'
       "PROVIDER_ELASTICSEARCH_ENDPOINTS": 'http://elasticsearch:9200'
