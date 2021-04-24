@@ -67,6 +67,7 @@ services:
   dotcms:
     image: lucidmachine/dotcms:latest
     environment:
+      "CMS_JAVA_OPTS": '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000'
       "CMS_HEAP_SIZE": '2g'
       "ES_ADMIN_PASSWORD": 'admin'
       "PROVIDER_DB_DNSNAME": 'db'
@@ -84,6 +85,8 @@ services:
       - db_net
       - es_net
       - http_net
+    ports:
+      - "8000:8000"
 
   devutils:
     image: lucidmachine/devutils-dotcms:latest
